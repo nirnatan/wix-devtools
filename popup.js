@@ -17,6 +17,17 @@ searchBtn.onclick = function() {
         exact: exact.checked
     };
 
+    chrome.tabs.sendMessage(tabId, evt, function (data) {
+        console.log(data);
+    });
+};
+
+var clearBtn = document.getElementById('clear');
+clearBtn.onclick = function() {
+    var evt = {
+        type: 'clearAll'
+    };
+
     chrome.tabs.sendMessage(tabId, evt);
 };
 
