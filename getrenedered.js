@@ -1,35 +1,37 @@
-//setTimeout(function() {
-//    /* Example: Send data to your Chrome extension*/
-//
-//    var data = {
-//        rendered: window.rendered
-//    };
-//
-//    document.dispatchEvent(new CustomEvent('RW759_connectExtension', {detail: data}));
-//}, 0);
+var React = require('react');
 
-document.addEventListener('RW759_connectExtension', function(e) {
-    debugger;
-    // e.detail contains the transferred data (can be anything, ranging
-    // from JavaScript objects to strings).
-    // Do something, for example:
-    if (window.component) {
-        window.component.getDOMNode().style.border = '';
-    }
-    if (window.components) {
-        _.each(window.components, function(c) { c.getDOMNode().style.border = ''; })
-    }
+function getComponentsByName(exact, displayName) {
+    return React.addons.TestUtils.findAllInRenderedTree(rendered, function (component) {
+        if (exact) {
+            return component.constructor.displayName === displayName;
+        }
 
-    var displayNameOrId = e.detail; //prompt('Enter displayName or id of component: ');
+        return new RegExp(displayName, 'ig').test(component.constructor.displayName);
+    });
+}
 
-    var React = require('react');
-    var components = React.addons.TestUtils.findAllInRenderedTree(rendered, function(component) {
-        return component.constructor.displayName === displayNameOrId || component.props.id === displayNameOrId;
+function searchByName(displayName, exact) {
+    _.each(window.components, function (c) {
+        c.getDOMNode().style.border = '';
     });
 
-    window.components = _.transform(components, function(comps, c) { comps[c.props.id] = c; }, {});
+    var components = getComponentsByName(exact, displayName);
 
-    _.each(window.components, function(c) {
+    window.components = _.transform(components, function (comps, c) {
+        comps[c.props.id] = c;
+    }, {});
+
+    _.each(window.components, function (c) {
         c.getDOMNode().style.border = '#F00 dashed 1px';
     });
+}
+
+document.addEventListener('RW759_connectExtension', function(e) {
+    switch (e.detail.type) {
+        case 'searchByName':
+            searchByName(e.detail.displayName, e.detail.exact);
+            break;
+        default:
+            console.error('no handler for event type ' + e.detail.type);
+    }
 });

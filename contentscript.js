@@ -6,6 +6,5 @@ s.onload = function () {
 };
 
 chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
-    debugger;
-    document.dispatchEvent(new CustomEvent('RW759_connectExtension', {detail: msg.displayName}));
+    document.dispatchEvent(new CustomEvent('RW759_connectExtension', {detail: msg}));
 });

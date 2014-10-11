@@ -2,9 +2,6 @@
 <html>
   <head>
     <title>Getting Started Extension's Popup</title>
-      <script src="libs/react-with-addons-0.11.2.min.js"></script>
-      <script src="libs/lodash.min.js"></script>
-
       <style>
       body {
         min-width: 357px;
@@ -31,7 +28,8 @@
   <label>
       DisplayName:
       <input type="text" id="name"/>
-      <input type="button" id="search">
+      <input type="checkbox" id="exact"/>
+      <input type="button" id="search" value="Search">
   </label>
   <div id="content"></div>
     <script src="popup.js"></script>

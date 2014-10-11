@@ -9,10 +9,18 @@ chrome.extension.onRequest.addListener(handleData);
 var searchBtn = document.getElementById('search');
 searchBtn.onclick = function() {
     var name = document.getElementById('name');
-    chrome.tabs.sendMessage(tabId, {displayName: name.value});
+    var exact = document.getElementById('exact');
+    debugger;
+    var evt = {
+        type: 'searchByName',
+        displayName: name.value,
+        exact: exact.checked
+    };
+
+    chrome.tabs.sendMessage(tabId, evt);
 };
 
-
+// Load the content script to the main tab in the current tab.
 chrome.windows.getCurrent(function (currentWindow) {
     chrome.tabs.query({ active: true, windowId: currentWindow.id }, function (activeTabs) {
         tabId = activeTabs[0].id;
