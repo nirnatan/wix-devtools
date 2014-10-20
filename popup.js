@@ -1,40 +1,121 @@
-var tabId;
+(function () {
+    var tabId;
+    var $search = $('#search');
 
-function handleData(data) {
-    debugger;
-}
+    function sendEvent(evt, callback) {
+        chrome.tabs.sendMessage(tabId, evt, callback);
+    }
 
-chrome.extension.onRequest.addListener(handleData);
+    function setContent(data) {
+        if (data.error) {
+            var $debug = $('<input type="button" value="Debug" />');
+            $debug.click(function () {
+                sendEvent({type: 'debug'});
+            });
 
-var searchBtn = document.getElementById('search');
-searchBtn.onclick = function() {
-    var name = document.getElementById('name');
-    var exact = document.getElementById('exact');
-    debugger;
-    var evt = {
-        type: 'searchByName',
-        displayName: name.value,
-        exact: exact.checked
-    };
+            $('body').children().first().replaceWith($debug);
+        }
 
-    chrome.tabs.sendMessage(tabId, evt, function (data) {
-        console.log(data);
+        var $content = clearContent();
+
+        var $ul = $('<ul></ul>');
+        _.each(data.ids, function (id) {
+            var item = $('<li>' + id + '</li>');
+            if (data.selectedId === id) {
+                item.css({
+                    border: 'solid 1px'
+                });
+            }
+            item.mouseenter(hoverSelectedItem.bind(undefined, true));
+            item.mouseleave(hoverSelectedItem.bind(undefined, false));
+            item.click(function () {
+                sendEvent({type: 'selectItem', id: id});
+                $ul.children().css({
+                    border: 'none'
+                });
+
+                item.css({
+                    border: 'solid 1px'
+                });
+            });
+            $ul.append(item);
+        });
+
+        $content.append($ul);
+    }
+
+    function hoverSelectedItem(select, event) {
+        var target = event.target;
+        target.style.backgroundColor = select ? 'lightblue' : 'white';
+        var compId = target.innerText;
+
+        var evt = {
+            type: select ? 'select' : 'unselect',
+            id: compId
+        };
+
+        sendEvent(evt);
+    }
+
+    $search.find('[name="name"]').keypress(function (evt) {
+        if (evt.keyCode === 13) {
+            $search.find('[name="query"]').click();
+        }
     });
-};
 
-var clearBtn = document.getElementById('clear');
-clearBtn.onclick = function() {
-    var evt = {
-        type: 'clearAll'
-    };
+    $search.find('[name="query"]').click(function () {
+        var name = $search.find('[name="name"]').val();
+        var exact = $search.find('[name="exact"]').is(':checked');
+        var evt = {
+            type: 'searchByName',
+            displayName: name,
+            exact: exact
+        };
 
-    chrome.tabs.sendMessage(tabId, evt);
-};
+        sendEvent(evt, setContent);
+    });
+
+    $('[value="reLayout"]').click(function () {
+        var evt = {
+            type: 'reLayout'
+        };
+
+        sendEvent(evt);
+    });
+
+    $('[value="forceUpdate"]').click(function () {
+        var evt = {
+            type: 'forceUpdate'
+        };
+
+        sendEvent(evt);
+    });
+
+    function clearContent() {
+        var $content = $('#content');
+        if ($content.children().length) {
+            $content.children().first().remove();
+        }
+
+        return $content;
+    }
+
+    $search.find('[name="clear"]').click(function () {
+        var evt = {
+            type: 'clearAll'
+        };
+
+        sendEvent(evt);
+        clearContent();
+    });
 
 // Load the content script to the main tab in the current tab.
-chrome.windows.getCurrent(function (currentWindow) {
-    chrome.tabs.query({ active: true, windowId: currentWindow.id }, function (activeTabs) {
-        tabId = activeTabs[0].id;
-        chrome.tabs.executeScript(tabId, { file: 'contentscript.js', allFrames: true });
+    chrome.windows.getCurrent(function (currentWindow) {
+        chrome.tabs.query({ active: true, windowId: currentWindow.id }, function (activeTabs) {
+            tabId = activeTabs[0].id;
+            chrome.tabs.executeScript(tabId, { file: 'contentscript.js', allFrames: true });
+
+            setTimeout(sendEvent.bind(this, {type: 'getComponents'}, setContent), 500);
+        });
     });
-});
+})();

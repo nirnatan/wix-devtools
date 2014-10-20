@@ -1,20 +1,22 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>Wix DevTools for Santa</title>
-      <style>
-      body {
-        min-width: 357px;
-        overflow-x: hidden;
-      }
+    <script type="text/javascript" src="libs/zepto.min.js"></script>
+    <script type="text/javascript" src="libs/lodash.min.js"></script>
+    <style>
+        body {
+            min-width: 357px;
+            overflow-x: hidden;
+        }
 
-      img {
-        margin: 5px;
-        border: 2px solid black;
-        vertical-align: middle;
-        width: 75px;
-        height: 75px;
-      }
+        img {
+            margin: 5px;
+            border: 2px solid black;
+            vertical-align: middle;
+            width: 75px;
+            height: 75px;
+        }
     </style>
 
     <!--
@@ -23,17 +25,31 @@
       -
       - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
      -->
-  </head>
-  <body>
-  <label>
-      DisplayName:
-      <input type="text" id="name"/>
-      <input type="checkbox" id="exact"/>
-      <input type="button" id="search" value="Search">
-      <input type="button" id="clear" value="Clear">
-  </label>
-  <div id="content"></div>
-    <script src="popup.js"></script>
-  </body>
+</head>
+<body>
+<div>
+    <div style="margin-bottom: 10px;">
+        <label id="search">
+            DisplayName:
+            <input type="text" name="name"/>
+            <input type="checkbox" name="exact" title="exact search"/>
+            <input type="button" name="query" value="Search">
+            <input type="button" name="clear" value="Clear">
+        </label>
+    </div>
+
+    <div>
+        <label id="reLayout">
+            <input type="button" value="reLayout"/>
+        </label>
+        <label id="forceUpdate">
+            <input type="button" value="forceUpdate"/>
+        </label>
+    </div>
+
+    <div id="content"></div>
+</div>
+<script src="popup.js"></script>
+</body>
 </html>
 

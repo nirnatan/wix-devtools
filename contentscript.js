@@ -6,6 +6,12 @@ s.onload = function () {
 };
 
 chrome.extension.onMessage.addListener(function (msg, sender, sendResponse) {
+    if (msg && msg.type === 'debug') {
+        var url = "http://" + location.host + location.pathname + (location.search ? location.search + "&" : "?") + "debug=all" + location.hash;
+        window.location.replace(url);
+        return;
+    }
+
     var listener = function (evt) {
         document.removeEventListener('RW759_connectExtensionResponse', listener);
         sendResponse(evt.detail);
