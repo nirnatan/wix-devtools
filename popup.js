@@ -18,25 +18,19 @@
 
         var $content = clearContent();
 
-        var $ul = $('<ul></ul>');
+        var $ul = $('<ul class="list-group"></ul>');
         _.each(data.ids, function (id) {
-            var item = $('<li>' + id + '</li>');
+            var item = $('<li class="list-group-item">' + id + '</li>');
             if (data.selectedId === id) {
-                item.css({
-                    border: 'solid 1px'
-                });
+                item.addClass('active');
             }
             item.mouseenter(hoverSelectedItem.bind(undefined, true));
             item.mouseleave(hoverSelectedItem.bind(undefined, false));
             item.click(function () {
                 sendEvent({type: 'selectItem', id: id});
-                $ul.children().css({
-                    border: 'none'
-                });
+                $ul.children().removeClass('active');
 
-                item.css({
-                    border: 'solid 1px'
-                });
+                item.addClass('active');
             });
             $ul.append(item);
         });
@@ -75,7 +69,7 @@
         sendEvent(evt, setContent);
     });
 
-    $('[value="reLayout"]').click(function () {
+    $('[value="relayout"]').click(function () {
         var evt = {
             type: 'reLayout'
         };

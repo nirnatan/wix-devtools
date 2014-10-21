@@ -2,52 +2,50 @@
 <html>
 <head>
     <title>Wix DevTools for Santa</title>
-    <script type="text/javascript" src="libs/zepto.min.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/javascript" src="libs/lodash.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="popup.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
     <style>
         body {
-            min-width: 357px;
+            min-width: 420px;
+            min-height: 100px;
             overflow-x: hidden;
         }
-
-        img {
-            margin: 5px;
-            border: 2px solid black;
-            vertical-align: middle;
-            width: 75px;
-            height: 75px;
-        }
     </style>
-
-    <!--
-      - JavaScript and HTML must be in separate files: see our Content Security
-      - Policy documentation[1] for details and explanation.
-      -
-      - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
-     -->
 </head>
 <body>
-<div>
-    <div style="margin-bottom: 10px;">
-        <label id="search">
-            DisplayName:
-            <input type="text" name="name"/>
-            <input type="checkbox" name="exact" title="exact search"/>
-            <input type="button" name="query" value="Search">
-            <input type="button" name="clear" value="Clear">
-        </label>
-    </div>
+<div style="margin-top: 10px; margin-bottom: 10px">
+    <div class="container-fluid">
+        <div class="row" id="search">
+            <div class="col-xs-9">
+                <div class="input-group">
+                    <input type="text" name="name" class="form-control"/>
+                    <span class="input-group-addon" title="Exact Name">
+                        <input type="checkbox">
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <input type="button" class="btn btn-primary" name="query" value="Search">
+            </div>
+        </div>
 
-    <div>
-        <label id="reLayout">
-            <input type="button" value="reLayout"/>
-        </label>
-        <label id="forceUpdate">
-            <input type="button" value="forceUpdate"/>
-        </label>
-    </div>
+        <div class="btn-toolbar" style="margin-left: 0; margin-top: 10px">
+            <input class="btn btn-success" type="button" value="relayout">
+            <input type="button" class="btn btn-success" value="forceUpdate">
+        </div>
 
-    <div id="content"></div>
+        <div id="content" class="row" style="width: 90%; margin-top: 15px;margin-left: 5px;"></div>
+    </div>
 </div>
 <script src="popup.js"></script>
 </body>

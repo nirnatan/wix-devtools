@@ -1,0 +1,25 @@
+{
+  "name": "wix-devtools",
+  "version": "0.0.1",
+  "homepage": "https://github.com/nirnatan/wix-devtools",
+  "authors": [
+    "Nir Natan <nirn@wix.com>"
+  ],
+  "description": "Chrome extension helper for Wix (Santa) developers",
+  "keywords": [
+    "wix",
+    "DevTools",
+    "chrome extenssion"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}

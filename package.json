@@ -1,0 +1,9 @@
+{
+  "name": "wix-devtools",
+  "description": "Wix Santa's Developer Chrome Extenssion",
+  "author": "Nir Natan <nirn@wix.com>",
+  "dependencies": {
+    "jquery": "^2.1.1"
+  },
+  "engine": "node 0.4.1"
+}

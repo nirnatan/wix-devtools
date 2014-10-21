@@ -33,14 +33,21 @@ function clearAll(styleOnly) {
     }
 }
 
-document.addEventListener('RW759_connectExtension', function(e) {
+document.addEventListener('RW759_connectExtension', function (e) {
     var data;
     switch (e.detail.type) {
         case 'searchByName':
             searchByName(e.detail.displayName, e.detail.exact);
             data = {
                 type: e.detail.type,
-                ids: _.keys(window.components)
+                ids: _(window.components)
+                    .sortBy(function (c) {
+                        return c.getDOMNode().getClientRects()[0].top;
+                    })
+                    .map(function (c) {
+                        return c.getDOMNode().id;
+                    })
+                    .value()
             };
             document.dispatchEvent(new CustomEvent('RW759_connectExtensionResponse', {detail: data}));
             break;
